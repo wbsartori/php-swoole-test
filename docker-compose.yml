@@ -1,0 +1,10 @@
+services:
+  php74:
+    build:
+      context: .
+      dockerfile: docker/php74/Dockerfile
+    container_name: php74-swoole
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "81:81"

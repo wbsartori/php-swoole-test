@@ -1,0 +1,15 @@
+{
+    "name": "wbsartori/php-swoole-test",
+    "autoload": {
+        "psr-4": {
+            "Wbsartori\\PhpSwooleTest\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "wbsartori",
+            "email": "wbsartori@gmail.com"
+        }
+    ],
+    "require": {}
+}
