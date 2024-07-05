@@ -1,44 +1,34 @@
-# Use the official PHP 7.4 image from Docker Hub
-FROM php:7.4.21-cli
+FROM php:7.4.30-cli-alpine3.15
 
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    zip \
-    nano \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    unzip
+RUN \
+    set -ex && \
+    curl -sfL https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer && \
+    chmod +x /usr/bin/composer                                                                     && \
+    composer self-update --clean-backups 2.2.18                                    && \
+    apk update && \
+    apk add --no-cache libstdc++ && \
+    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS curl-dev openssl-dev pcre-dev pcre2-dev zlib-dev && \
+    docker-php-ext-install pdo_mysql && \
+    pecl channel-update pecl.php.net && \
+    pecl install --configureoptions 'enable-redis-igbinary="no" enable-redis-lzf="no" enable-redis-zstd="no"' redis-5.3.7 && \
+    docker-php-ext-enable redis && \
+    docker-php-ext-install sockets && \
+    docker-php-source extract && \
+    mkdir /usr/src/php/ext/swoole && \
+    curl -sfL https://github.com/swoole/swoole-src/archive/v4.8.12.tar.gz -o swoole.tar.gz && \
+    tar xfz swoole.tar.gz --strip-components=1 -C /usr/src/php/ext/swoole && \
+    docker-php-ext-configure swoole \
+        --enable-http2   \
+        --enable-mysqlnd \
+        --enable-openssl \
+        --enable-sockets --enable-swoole-curl --enable-swoole-json && \
+    docker-php-ext-install -j$(nproc) swoole && \
+    rm -f swoole.tar.gz $HOME/.composer/*-old.phar && \
+    docker-php-source delete && \
+    apk del .build-deps
 
-# Swoole -> https://www.php.net/manual/pt_BR/swoole.installation.php Retirado da propria doc do php
-RUN apt-get update && apt-get install vim -y && \
-    apt-get install openssl -y && \
-    apt-get install libssl-dev -y && \
-    apt-get install wget -y && \
-    apt-get install git -y && \
-    apt-get install procps -y && \
-    apt-get install htop -y
-
-RUN cd /tmp && git clone https://github.com/swoole/swoole-src.git && \
-    cd swoole-src && \
-    git checkout v4.5.2 && \
-    phpize  && \
-    ./configure  --enable-openssl && \
-    make && make install
-
-RUN touch /usr/local/etc/php/conf.d/swoole.ini && \
-    echo 'extension=swoole.so' > /usr/local/etc/php/conf.d/swoole.ini
-
-RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64
-RUN chmod +x /usr/local/bin/dumb-init
-
-RUN apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
-
-ENTRYPOINT ["/usr/local/bin/dumb-init", "--", "php"]
-
-WORKDIR /var/www/html
+WORKDIR "/var/www/"
 
 COPY . .
 
-CMD ["php", "-S", "0.0.0.0:81", "-t", "public"]
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]

@@ -5,6 +5,6 @@ services:
       dockerfile: docker/php74/Dockerfile
     container_name: php74-swoole
     volumes:
-      - .:/var/www/html
+      - .:/var/www
     ports:
-      - "81:81"
+      - "80:80"
