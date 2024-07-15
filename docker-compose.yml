@@ -25,7 +25,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./:/var/www/index.php
+      - ./:/var/www
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - php-swoole

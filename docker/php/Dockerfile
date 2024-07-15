@@ -11,8 +11,6 @@ RUN apt-get update && apt-get install vim -y && \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY . .
-
 RUN cd /tmp && git clone https://github.com/swoole/swoole-src.git && \
     cd swoole-src && \
     git checkout v4.5.2 && \
