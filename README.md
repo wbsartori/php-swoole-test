@@ -41,5 +41,8 @@ docker compose exec -it nginx bash
 #### Access image from php-cli
 ```bash
 docker compose exec -it php-cli bash
+
+#Execute
+root@117aa8bd6ca0:/var/www# composer install
 ```
-![docker ps](./public/images/docker_exec_php_cli.png)
+![docker ps](./public/images/docker_composer_install.png)
