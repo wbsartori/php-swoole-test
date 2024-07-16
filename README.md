@@ -46,3 +46,16 @@ docker compose exec -it php-cli bash
 root@117aa8bd6ca0:/var/www# composer install
 ```
 ![docker ps](./public/images/docker_composer_install.png)
+
+---
+
+### Check installation
+
+#### Access image from php-cli
+```bash
+docker compose exec -it php-cli bash
+
+#Execute
+root@117aa8bd6ca0:/var/www# php index.php
+```
+![docker ps](./public/images/docker_version_swoole.png)
