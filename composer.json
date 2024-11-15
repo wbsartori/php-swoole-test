@@ -1,15 +1,19 @@
 {
-    "name": "wbsartori/php-swoole-test",
-    "autoload": {
-        "psr-4": {
-            "PhpSwooleTest\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "wbsartori",
-            "email": "wbsartori@gmail.com"
-        }
-    ],
-    "require": {}
+  "name": "wbsartori/php-swoole-test",
+  "autoload": {
+    "psr-4": {
+      "PhpSwooleTest\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "wbsartori",
+      "email": "wbsartori@gmail.com"
+    }
+  ],
+  "require": {
+    "ext-json": "*",
+    "ext-pdo": "*",
+    "swoole/ide-helper": "^5.1"
+  }
 }
